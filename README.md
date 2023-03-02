@@ -1,6 +1,6 @@
 # 5dpo_ratf_ros_driver
 
-**Version 0.0.0**
+**Version 1.0.0**
 
 This repository implements a driver within a ROS package to communicate with the
 firmware present in the four-wheeled omnidirectional robotic platform used by
@@ -16,22 +16,21 @@ This communication is based on the example `4_callback` provided in the
 
 **With this version, it is possible to do:**
 
-- TBC
-
-**The next version will add these features:**
-
 - Communicate with Arduino Mega 2560 using Boost.Asio
   ([sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port))
 - Subscribe motors angular speed reference
 - Publish encoders data (encoders + wheels angular speed)
 - Read encoders
-- Read switch
 - Set motors speed
-- Set solenoid
 - Reset driver upon reset signal
 - Watchdog timer to monitor the motors angular speed reference
 - Send serial message to the firmware upon reconnection of the serial port
   communication
+
+**The next version will add these features:**
+
+- Read switch
+- Set solenoid
 - Publish optionally the odometry data
 
 ## ROS
