@@ -10,7 +10,7 @@
 namespace sdpo_ratf_ros_driver {
 
 const int kCtrlFreq = 25;
-const int kMotCtrlFreq = 100;
+const int kMotCtrlFreq = 50;
 
 struct Motor {
  public:
