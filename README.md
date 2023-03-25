@@ -1,6 +1,6 @@
 # 5dpo_ratf_ros_driver
 
-**Version 1.0.1**
+**Version 1.0.2**
 
 This repository implements a driver within a ROS package to communicate with the
 firmware present in the four-wheeled omnidirectional robotic platform used by
