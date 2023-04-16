@@ -7,6 +7,7 @@ set(${PROJECT_NAME}_CATKIN_DEPENDENCIES
   sdpo_ros_serial_port
   serial_communication_channels
   std_msgs
+  std_srvs
 )
 
 file(GLOB_RECURSE PROGRAM_SOURCES RELATIVE ${PROJECT_SOURCE_DIR}

@@ -47,6 +47,7 @@
   <depend>sdpo_ros_serial_port</depend>
   <depend>serial_communication_channels</depend>
   <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

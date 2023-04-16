@@ -16,6 +16,9 @@ SdpoRatfROSDriver::SdpoRatfROSDriver() : loop_rate_(kCtrlFreq) {
   pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
   sub_mot_ref_ = nh.subscribe("motors_ref", 1,
                               &SdpoRatfROSDriver::subMotRef, this);
+
+  srv_solenoid_ = nh.advertiseService("set_solenoid_state",
+      &SdpoRatfROSDriver::srvSolenoid, this);
 }
 
 void SdpoRatfROSDriver::run() {
@@ -127,6 +130,17 @@ void SdpoRatfROSDriver::subMotRef(const sdpo_ros_interfaces_hw::mot_ref& msg) {
     sample_time_prev_ = sample_time_;
     sample_time_ = ros::Time::now();
   }
+}
+
+bool SdpoRatfROSDriver::srvSolenoid(std_srvs::SetBool::Request& request,
+    std_srvs::SetBool::Response& response) {
+  rob_.mtx_.lock();
+  rob_.solenoid_state = request.data;
+  rob_.mtx_.unlock();
+
+  response.success = true;
+  response.message = "";
+  return true;
 }
 
 } // namespace sdpo_ratf_ros_driver

@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.0.2**
+**Version 1.1.0**
 
 **With this version, it is possible to do:**
 
@@ -26,11 +26,11 @@ This communication is based on the example `4_callback` provided in the
 - Watchdog timer to monitor the motors angular speed reference
 - Send serial message to the firmware upon reconnection of the serial port
   communication
+- Read switch
+- Set solenoid
 
 **The next version will add these features:**
 
-- Read switch
-- Set solenoid
 - Publish optionally the odometry data
 
 ## ROS
@@ -47,6 +47,7 @@ This communication is based on the example `4_callback` provided in the
 - [sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port)
 - [serial_communication_channels](https://github.com/5dpo/serial_communication_channels)
 - [std_msgs](https://wiki.ros.org/std_msgs)
+- [std_srvs](https://wiki.ros.org/std_srvs)
 
 ### Parameters
 
@@ -69,7 +70,8 @@ This communication is based on the example `4_callback` provided in the
 
 ### Services
 
-None.
+- set_solenoid_state
+  ([SetBool.srv](https://docs.ros.org/en/api/std_srvs/html/srv/SetBool.html))
 
 ### Actions
 
