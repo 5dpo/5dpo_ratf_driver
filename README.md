@@ -31,6 +31,8 @@ This communication is based on the example `4_callback` provided in the
 
 **The next version will add these features:**
 
+- Node specific for setting PWM values through ROS services and log data for
+  future calibration of the PI controllers
 - Publish optionally the odometry data
 
 ## ROS
