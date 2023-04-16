@@ -1,6 +1,4 @@
-# 5dpo_ratf_ros_driver
-
-**Version 1.0.2**
+# [5dpo_ratf_ros_driver](https://github.com/5dpo/5dpo_ratf_ros_driver)
 
 This repository implements a driver within a ROS package to communicate with the
 firmware present in the four-wheeled omnidirectional robotic platform used by
@@ -13,6 +11,8 @@ The serial communication is handled by
 [Boost.Asio](https://www.boost.org/doc/libs/1_80_0/doc/html/boost_asio.html).
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
+
+**Version 1.0.2**
 
 **With this version, it is possible to do:**
 
