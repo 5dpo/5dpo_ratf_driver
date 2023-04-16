@@ -1,6 +1,4 @@
-# 5dpo_ratf_ros_driver
-
-**Version 1.0.2**
+# [5dpo_ratf_ros_driver](https://github.com/5dpo/5dpo_ratf_ros_driver)
 
 This repository implements a driver within a ROS package to communicate with the
 firmware present in the four-wheeled omnidirectional robotic platform used by
@@ -14,6 +12,8 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
+**Version 1.1.0**
+
 **With this version, it is possible to do:**
 
 - Communicate with Arduino Mega 2560 using Boost.Asio
@@ -26,11 +26,13 @@ This communication is based on the example `4_callback` provided in the
 - Watchdog timer to monitor the motors angular speed reference
 - Send serial message to the firmware upon reconnection of the serial port
   communication
+- Read switch
+- Set solenoid
 
 **The next version will add these features:**
 
-- Read switch
-- Set solenoid
+- Node specific for setting PWM values through ROS services and log data for
+  future calibration of the PI controllers
 - Publish optionally the odometry data
 
 ## ROS
@@ -46,6 +48,8 @@ This communication is based on the example `4_callback` provided in the
 - [sdpo_ros_interfaces_hw](https://github.com/5dpo/5dpo_ros_interfaces)
 - [sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port)
 - [serial_communication_channels](https://github.com/5dpo/serial_communication_channels)
+- [std_msgs](https://wiki.ros.org/std_msgs)
+- [std_srvs](https://wiki.ros.org/std_srvs)
 
 ### Parameters
 
@@ -63,10 +67,13 @@ This communication is based on the example `4_callback` provided in the
 
 - motors_encoders
   ([mot_enc_array.msg](https://github.com/5dpo/5dpo_ros_interfaces/blob/main/5dpo_ros_interfaces_hw/msg/mot_enc_array.msg))
+- switch_state
+  ([Bool.msg](https://docs.ros.org/en/api/std_msgs/html/msg/Bool.html))
 
 ### Services
 
-None.
+- set_solenoid_state
+  ([SetBool.srv](https://docs.ros.org/en/api/std_srvs/html/srv/SetBool.html))
 
 ### Actions
 

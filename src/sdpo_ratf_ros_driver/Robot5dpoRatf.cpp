@@ -208,6 +208,11 @@ void Robot5dpoRatf::rcvSerialData(const char *data, unsigned int len) {
           mtx_.unlock();
           break;
 
+        case 's':
+          mtx_.lock();
+          switch_state = (serial_cfg_->channel_s == 0);
+          mtx_.unlock();
+
         default:
           break;
         }
@@ -222,12 +227,14 @@ void Robot5dpoRatf::sendSerialData() {
   serial_cfg_->channel_H = static_cast<float>(mot[1].w_r);
   serial_cfg_->channel_I = static_cast<float>(mot[2].w_r);
   serial_cfg_->channel_J = static_cast<float>(mot[3].w_r);
+  serial_cfg_->channel_L = solenoid_state? 1 : 0;
   mtx_.unlock();
 
   serial_async_->writeString(SendChannel('G'));
   serial_async_->writeString(SendChannel('H'));
   serial_async_->writeString(SendChannel('I'));
   serial_async_->writeString(SendChannel('J'));
+  serial_async_->writeString(SendChannel('L'));
 }
 
 } // namespace sdpo_ratf_ros_driver

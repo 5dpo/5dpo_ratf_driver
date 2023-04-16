@@ -49,6 +49,9 @@ class Robot5dpoRatf {
   Motor mot[4];
   std::mutex mtx_;
 
+  bool switch_state = false;
+  bool solenoid_state = false;
+
  private:
   std::string serial_port_name_;
   SerialChannelsConfig *serial_cfg_;
