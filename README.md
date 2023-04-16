@@ -46,6 +46,7 @@ This communication is based on the example `4_callback` provided in the
 - [sdpo_ros_interfaces_hw](https://github.com/5dpo/5dpo_ros_interfaces)
 - [sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port)
 - [serial_communication_channels](https://github.com/5dpo/serial_communication_channels)
+- [std_msgs](https://wiki.ros.org/std_msgs)
 
 ### Parameters
 
@@ -63,6 +64,8 @@ This communication is based on the example `4_callback` provided in the
 
 - motors_encoders
   ([mot_enc_array.msg](https://github.com/5dpo/5dpo_ros_interfaces/blob/main/5dpo_ros_interfaces_hw/msg/mot_enc_array.msg))
+- switch_state
+  ([Bool.msg](https://docs.ros.org/en/api/std_msgs/html/msg/Bool.html))
 
 ### Services
 

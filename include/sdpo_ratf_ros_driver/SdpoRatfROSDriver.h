@@ -16,6 +16,7 @@ class SdpoRatfROSDriver {
   ros::Rate loop_rate_;
 
   ros::Publisher pub_mot_enc_;
+  ros::Publisher pub_switch_;
   ros::Subscriber sub_mot_ref_;
 
   ros::Time sample_time_;
@@ -35,6 +36,7 @@ class SdpoRatfROSDriver {
   bool readParam();
 
   void pubMotEnc();
+  void pubSwitch();
   void subMotRef(const sdpo_ros_interfaces_hw::mot_ref& msg);
 };
 

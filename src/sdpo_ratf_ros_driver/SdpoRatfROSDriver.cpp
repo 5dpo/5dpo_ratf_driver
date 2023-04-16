@@ -1,5 +1,7 @@
 #include "sdpo_ratf_ros_driver/SdpoRatfROSDriver.h"
 
+#include <std_msgs/Bool.h>
+
 namespace sdpo_ratf_ros_driver {
 
 SdpoRatfROSDriver::SdpoRatfROSDriver() : loop_rate_(kCtrlFreq) {
@@ -11,6 +13,7 @@ SdpoRatfROSDriver::SdpoRatfROSDriver() : loop_rate_(kCtrlFreq) {
 
   pub_mot_enc_ = nh.advertise<sdpo_ros_interfaces_hw::mot_enc_array>(
       "motors_encoders", 1);
+  pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
   sub_mot_ref_ = nh.subscribe("motors_ref", 1,
                               &SdpoRatfROSDriver::subMotRef, this);
 }
@@ -44,6 +47,7 @@ void SdpoRatfROSDriver::run() {
       }
     } else {
       pubMotEnc();
+      pubSwitch();
     }
 
     ros::spinOnce();
@@ -100,6 +104,16 @@ void SdpoRatfROSDriver::pubMotEnc() {
   rob_.mtx_.unlock();
 
   pub_mot_enc_.publish(msg);
+}
+
+void SdpoRatfROSDriver::pubSwitch() {
+  std_msgs::Bool msg;
+
+  rob_.mtx_.lock();
+  msg.data = rob_.switch_state;
+  rob_.mtx_.unlock();
+
+  pub_switch_.publish(msg);
 }
 
 void SdpoRatfROSDriver::subMotRef(const sdpo_ros_interfaces_hw::mot_ref& msg) {
