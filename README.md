@@ -133,13 +133,14 @@ roslaunch sdpo_ratf_ros_driver sdpo_ratf_ros_driver.launch
      - w / #ticks = f(PWM)
      - E.g., estimate the deadzone of the motor and tune the Hammerstein
        nonlinear block implemented in the firmware
-   - TBC
+   - [auto_tunning_motion.sh](sh/auto_tunning_motion.sh)
      ```sh
-     # TBC...
+     ./auto_tunning_motion.sh <#runs per motion> <time per motion state (s)> <v,vn: pwm ini> <v,vn: pwm fin> <w: pwm ini> <w: pwm fin>
      ```
      - w / #ticks = f(PWM)
-     - Shell script to automatically perform v, vn, w motions to use the
-       _Internal Model Control (IMC) method_
+     - Shell script to automatically perform v, vn, w motions to use the logged
+       data for tunning the PI controller with, e.g., the _Internal Model_
+       _Control (IMC) method_
 
 ## Contacts
 
