@@ -11,6 +11,7 @@ namespace sdpo_ratf_ros_driver {
 
 const int kCtrlFreq = 25;
 const int kMotCtrlFreq = 50;
+const int16_t kMaxMotPWM = 255;
 
 struct Motor {
  public:
@@ -20,6 +21,7 @@ struct Motor {
   int32_t enc_ticks_prev = 0;
   int32_t enc_ticks_delta = 0;
   int32_t enc_ticks_delta_pub = 0;
+  int16_t pwm = 0;
   double w_r = 0;
   double w = 0;
   double sample_time = 0;
@@ -33,6 +35,8 @@ struct Motor {
   void setEncTicksDelta(const int32_t& delta_enc_ticks);
   void setEncTicks(const int32_t& total_enc_ticks);
   double getEncTicksDeltaPub();
+
+  void setPWM(const int16_t& pwm_mot);
 
   void setWr(const double& w_ref);
 

@@ -52,6 +52,16 @@ double Motor::getEncTicksDeltaPub() {
   return pub_delta;
 }
 
+void Motor::setPWM(const int16_t& pwm_mot) {
+  if (pwm_mot > kMaxMotPWM) {
+    pwm = kMaxMotPWM;
+  } else if (pwm_mot < -kMaxMotPWM) {
+    pwm = -kMaxMotPWM;
+  } else {
+    pwm = pwm_mot;
+  }
+}
+
 void Motor::setWr(const double& w_ref) {
   w_r = w_ref;
 }
@@ -67,6 +77,7 @@ void Motor::reset() {
   enc_ticks_prev = 0;
   enc_ticks_delta = 0;
   enc_ticks_delta_pub = 0;
+  pwm = 0;
   w_r = 0;
   w = 0;
   sample_time = 0;

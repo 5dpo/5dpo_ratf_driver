@@ -45,6 +45,8 @@ This communication is based on the example `4_callback` provided in the
 ### Dependencies
 
 - [roscpp](https://wiki.ros.org/roscpp)
+- [message_generation](https://wiki.ros.org/message_generation)
+- [message_runtime](https://wiki.ros.org/message_runtime)
 - [sdpo_ros_interfaces_hw](https://github.com/5dpo/5dpo_ros_interfaces)
 - [sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port)
 - [serial_communication_channels](https://github.com/5dpo/serial_communication_channels)
@@ -74,6 +76,13 @@ This communication is based on the example `4_callback` provided in the
 
 - set_solenoid_state
   ([SetBool.srv](https://docs.ros.org/en/api/std_srvs/html/srv/SetBool.html))
+
+**sdpo_ratf_ros_driver_tune**
+
+- set_motors_pwm ([SetMotorsPWM.srv](srv/SetMotorsPWM.srv))
+  ```sh
+  rosservice call /unnamed_robot/set_motors_pwm [0,0,0,0]
+  ```
 
 ### Actions
 

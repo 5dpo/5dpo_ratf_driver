@@ -43,6 +43,8 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <depend>roscpp</depend>
+  <depend>message_generation</depend>
+  <depend>message_runtime</depend>
   <depend>sdpo_ros_interfaces_hw</depend>
   <depend>sdpo_ros_serial_port</depend>
   <depend>serial_communication_channels</depend>

@@ -6,6 +6,7 @@
 #include <std_srvs/SetBool.h>
 
 #include "sdpo_ratf_ros_driver/Robot5dpoRatfTune.h"
+#include "sdpo_ratf_ros_driver/SetMotorsPWM.h"
 
 namespace sdpo_ratf_ros_driver {
 
@@ -16,6 +17,7 @@ class SdpoRatfROSDriverTunning {
   ros::Publisher pub_mot_enc_;
   ros::Publisher pub_switch_;
 
+  ros::ServiceServer srv_motors_pwm_;
   ros::ServiceServer srv_solenoid_;
 
   Robot5dpoRatfTune rob_;
@@ -34,6 +36,8 @@ class SdpoRatfROSDriverTunning {
   void pubMotEnc();
   void pubSwitch();
 
+  bool srvMotorsPWM(SetMotorsPWM::Request& request,
+      SetMotorsPWM::Response& response);
   bool srvSolenoid(std_srvs::SetBool::Request& request,
       std_srvs::SetBool::Response& response);
 };

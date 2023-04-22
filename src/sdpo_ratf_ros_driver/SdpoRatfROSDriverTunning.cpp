@@ -16,12 +16,13 @@ SdpoRatfROSDriverTunning::SdpoRatfROSDriverTunning() {
       "motors_encoders", 1);
   pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
 
+  srv_motors_pwm_ = nh.advertiseService("set_motors_pwm",
+      &SdpoRatfROSDriverTunning::srvMotorsPWM, this);
   srv_solenoid_ = nh.advertiseService("set_solenoid_state",
       &SdpoRatfROSDriverTunning::srvSolenoid, this);
 }
 
 void SdpoRatfROSDriverTunning::run() {
-  ROS_INFO("Test");
   pubMotEnc();
   pubSwitch();
 }
@@ -39,22 +40,23 @@ bool SdpoRatfROSDriverTunning::readParam() {
   auto print_is_default_param_set =
       [&nh_private](const std::string& param_name) {
     if (!nh_private.hasParam(param_name)) {
-      ROS_INFO("[sdpo_ratf_ros_driver] Parameter %s not set in the "
+      ROS_INFO("[sdpo_ratf_ros_driver_tune] Parameter %s not set in the "
                "parameter server (using default value)",
                param_name.c_str());
     }
   };
 
   print_is_default_param_set("encoder_res");
-  ROS_INFO("[sdpo_ratf_ros_driver] Encoder resolution: %lf (ticks/rev)",
+  ROS_INFO("[sdpo_ratf_ros_driver_tune] Encoder resolution: %lf (ticks/rev)",
            rob_.mot[0].encoder_res);
 
   print_is_default_param_set("gear_reduction");
-  ROS_INFO("[sdpo_ratf_ros_driver] Gear reduction ratio: %lf (n:1)",
+  ROS_INFO("[sdpo_ratf_ros_driver_tune] Gear reduction ratio: %lf (n:1)",
            rob_.mot[0].gear_reduction);
 
   print_is_default_param_set("serial_port_name");
-  ROS_INFO("[sdpo_ratf_ros_driver] Serial port: %s", serial_port_name_.c_str());
+  ROS_INFO("[sdpo_ratf_ros_driver_tune] Serial port: %s",
+           serial_port_name_.c_str());
 
   return true;
 }
@@ -85,6 +87,27 @@ void SdpoRatfROSDriverTunning::pubSwitch() {
   rob_.mtx_.unlock();
 
   pub_switch_.publish(msg);
+}
+
+bool SdpoRatfROSDriverTunning::srvMotorsPWM(SetMotorsPWM::Request& request,
+    SetMotorsPWM::Response& response) {
+  if (request.motors_pwm.size() != sizeof(rob_.mot)/sizeof(Motor)) {
+    ROS_WARN("[sdpo_ratf_ros_driver_tune] Expected to receive PWM for 4 motors "
+             "instead of only %ld. Command ignored...",
+             request.motors_pwm.size());
+
+    return false;
+  }
+
+  rob_.mtx_.lock();
+  for (size_t i = 0; i < request.motors_pwm.size(); i++) {
+    rob_.mot[i].setPWM(request.motors_pwm[i]);
+  }
+  ROS_INFO("[sdpo_ratf_ros_driver_tune] PWM set: [%d %d %d %d]",
+           rob_.mot[0].pwm, rob_.mot[1].pwm, rob_.mot[2].pwm, rob_.mot[3].pwm);
+  rob_.mtx_.unlock();
+
+  return true;
 }
 
 bool SdpoRatfROSDriverTunning::srvSolenoid(std_srvs::SetBool::Request& request,
