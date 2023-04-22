@@ -159,17 +159,15 @@ void Robot5dpoRatfTune::rcvSerialData(const char *data, unsigned int len) {
 
 void Robot5dpoRatfTune::sendSerialData() {
   mtx_.lock();
-  serial_cfg_->channel_G = static_cast<float>(mot[0].w_r);
-  serial_cfg_->channel_H = static_cast<float>(mot[1].w_r);
-  serial_cfg_->channel_I = static_cast<float>(mot[2].w_r);
-  serial_cfg_->channel_J = static_cast<float>(mot[3].w_r);
+  for (uint8_t i = 0; i < 4; i++) {
+    serial_cfg_->channel_K = mot[i].pwm & 0xFFFF;
+    serial_cfg_->channel_K = serial_cfg_->channel_K |
+        ((i & 0x03) << 24);
+    serial_async_->writeString(SendChannel('K'));
+  }
   serial_cfg_->channel_L = solenoid_state? 1 : 0;
   mtx_.unlock();
 
-  serial_async_->writeString(SendChannel('G'));
-  serial_async_->writeString(SendChannel('H'));
-  serial_async_->writeString(SendChannel('I'));
-  serial_async_->writeString(SendChannel('J'));
   serial_async_->writeString(SendChannel('L'));
 }
 
