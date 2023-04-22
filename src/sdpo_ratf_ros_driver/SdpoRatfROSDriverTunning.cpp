@@ -7,14 +7,14 @@ namespace sdpo_ratf_ros_driver {
 SdpoRatfROSDriverTunning::SdpoRatfROSDriverTunning() {
   readParam();
 
+  pub_mot_enc_ = nh.advertise<sdpo_ros_interfaces_hw::mot_enc_array>(
+      "motors_encoders", 1);
+  pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
+
   rob_.setSerialPortName(serial_port_name_);
   rob_.openSerial();
   rob_.run = std::bind(&SdpoRatfROSDriverTunning::run, this);
   rob_.init();
-
-  pub_mot_enc_ = nh.advertise<sdpo_ros_interfaces_hw::mot_enc_array>(
-      "motors_encoders", 1);
-  pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
 
   srv_motors_pwm_ = nh.advertiseService("set_motors_pwm",
       &SdpoRatfROSDriverTunning::srvMotorsPWM, this);
