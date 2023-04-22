@@ -112,9 +112,34 @@ catkin build
 
 ### Launch
 
+**sdpo_ratf_ros_driver_node**
+
 ```sh
 roslaunch sdpo_ratf_ros_driver sdpo_ratf_ros_driver.launch
 ```
+
+**sdpo_ratf_ros_driver_tune**
+
+1. Measure the battery level with a multimeter
+2. Open a terminal and launch the node
+   ```sh
+   roslaunch sdpo_ratf_ros_driver sdpo_ratf_ros_driver_tune.launch battery:=<battery level>
+   ```
+3. Open another terminal and use the shell scripts provided in this repository
+   - [set_robot_pwm.sh](sh/set_robot_pwm.sh)
+     ```sh
+     ./set_robot_pwm.sh <v,vn,w> <pwm value>
+     ```
+     - w / #ticks = f(PWM)
+     - E.g., estimate the deadzone of the motor and tune the Hammerstein
+       nonlinear block implemented in the firmware
+   - TBC
+     ```sh
+     # TBC...
+     ```
+     - w / #ticks = f(PWM)
+     - Shell script to automatically perform v, vn, w motions to use the
+       _Internal Model Control (IMC) method_
 
 ## Contacts
 
