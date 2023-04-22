@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.1.0**
+**Version 1.2.0**
 
 **With this version, it is possible to do:**
 
@@ -28,11 +28,11 @@ This communication is based on the example `4_callback` provided in the
   communication
 - Read switch
 - Set solenoid
+- Node specific for setting PWM values through ROS services and log data for
+  future calibration of the PI controllers
 
 **The next version will add these features:**
 
-- Node specific for setting PWM values through ROS services and log data for
-  future calibration of the PI controllers
 - Publish optionally the odometry data
 
 ## ROS
@@ -71,6 +71,11 @@ This communication is based on the example `4_callback` provided in the
   ([mot_enc_array.msg](https://github.com/5dpo/5dpo_ros_interfaces/blob/main/5dpo_ros_interfaces_hw/msg/mot_enc_array.msg))
 - switch_state
   ([Bool.msg](https://docs.ros.org/en/api/std_msgs/html/msg/Bool.html))
+
+**sdpo_ratf_ros_driver_tune**
+
+- motors_data
+  ([mot_data_array.msg](https://github.com/5dpo/5dpo_ros_interfaces/blob/main/5dpo_ros_interfaces_hw/msg/mot_data_array.msg))
 
 ### Services
 

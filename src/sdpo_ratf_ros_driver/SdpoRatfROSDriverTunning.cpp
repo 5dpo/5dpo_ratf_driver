@@ -7,8 +7,8 @@ namespace sdpo_ratf_ros_driver {
 SdpoRatfROSDriverTunning::SdpoRatfROSDriverTunning() {
   readParam();
 
-  pub_mot_enc_ = nh.advertise<sdpo_ros_interfaces_hw::mot_enc_array>(
-      "motors_encoders", 1);
+  pub_mot_data_ = nh.advertise<sdpo_ros_interfaces_hw::mot_data_array>(
+      "motors_data", 1);
   pub_switch_ = nh.advertise<std_msgs::Bool>("switch_state", 1);
 
   rob_.setSerialPortName(serial_port_name_);
@@ -23,7 +23,7 @@ SdpoRatfROSDriverTunning::SdpoRatfROSDriverTunning() {
 }
 
 void SdpoRatfROSDriverTunning::run() {
-  pubMotEnc();
+  pubMotData();
   pubSwitch();
 }
 
@@ -61,22 +61,24 @@ bool SdpoRatfROSDriverTunning::readParam() {
   return true;
 }
 
-void SdpoRatfROSDriverTunning::pubMotEnc() {
-  sdpo_ros_interfaces_hw::mot_enc_array msg;
+void SdpoRatfROSDriverTunning::pubMotData() {
+  sdpo_ros_interfaces_hw::mot_data_array msg;
 
   msg.stamp = ros::Time::now();
-  msg.mot_enc_array_data.resize(4);
+  msg.mot_data_array.resize(4);
 
   rob_.mtx_.lock();
   for (int i = 0; i < 4; i++) {
-    msg.mot_enc_array_data[i].encoder_delta = rob_.mot[i].getEncTicksDeltaPub();
-    msg.mot_enc_array_data[i].ticks_per_rev =
+    msg.mot_data_array[i].sample_period = rob_.mot[i].sample_time;
+    msg.mot_data_array[i].pwm = rob_.mot[i].pwm;
+    msg.mot_data_array[i].encoder_delta = rob_.mot[i].getEncTicksDeltaPub();
+    msg.mot_data_array[i].ticks_per_rev =
         rob_.mot[i].encoder_res * rob_.mot[i].gear_reduction;
-    msg.mot_enc_array_data[i].angular_speed = rob_.mot[i].w;
+    msg.mot_data_array[i].angular_speed = rob_.mot[i].w;
   }
   rob_.mtx_.unlock();
 
-  pub_mot_enc_.publish(msg);
+  pub_mot_data_.publish(msg);
 }
 
 void SdpoRatfROSDriverTunning::pubSwitch() {

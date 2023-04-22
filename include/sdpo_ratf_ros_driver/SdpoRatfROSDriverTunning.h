@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ros/ros.h>
-#include <sdpo_ros_interfaces_hw/mot_enc_array.h>
+#include <sdpo_ros_interfaces_hw/mot_data_array.h>
 #include <sdpo_ros_interfaces_hw/mot_ref.h>
 #include <std_srvs/SetBool.h>
 
@@ -14,7 +14,7 @@ class SdpoRatfROSDriverTunning {
  private:
   ros::NodeHandle nh;
 
-  ros::Publisher pub_mot_enc_;
+  ros::Publisher pub_mot_data_;
   ros::Publisher pub_switch_;
 
   ros::ServiceServer srv_motors_pwm_;
@@ -33,7 +33,7 @@ class SdpoRatfROSDriverTunning {
  private:
   bool readParam();
 
-  void pubMotEnc();
+  void pubMotData();
   void pubSwitch();
 
   bool srvMotorsPWM(SetMotorsPWM::Request& request,
