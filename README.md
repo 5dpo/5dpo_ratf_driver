@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.2.0**
+**Version 1.3.0**
 
 **With this version, it is possible to do:**
 
@@ -30,6 +30,8 @@ This communication is based on the example `4_callback` provided in the
 - Set solenoid
 - Node specific for setting PWM values through ROS services and log data for
   future calibration of the PI controllers
+- Scripts (see in [sh](sh/)) to automate the retrieval of log data for tunning
+  the PI controllers
 
 **The next version will add these features:**
 
@@ -112,9 +114,35 @@ catkin build
 
 ### Launch
 
+**sdpo_ratf_ros_driver_node**
+
 ```sh
 roslaunch sdpo_ratf_ros_driver sdpo_ratf_ros_driver.launch
 ```
+
+**sdpo_ratf_ros_driver_tune**
+
+1. Measure the battery level with a multimeter
+2. Open a terminal and launch the node
+   ```sh
+   roslaunch sdpo_ratf_ros_driver sdpo_ratf_ros_driver_tune.launch battery:=<battery level>
+   ```
+3. Open another terminal and use the shell scripts provided in this repository
+   - [set_robot_pwm.sh](sh/set_robot_pwm.sh)
+     ```sh
+     ./set_robot_pwm.sh <v,vn,w> <pwm value>
+     ```
+     - w / #ticks = f(PWM)
+     - E.g., estimate the deadzone of the motor and tune the Hammerstein
+       nonlinear block implemented in the firmware
+   - [auto_tunning_motion.sh](sh/auto_tunning_motion.sh)
+     ```sh
+     ./auto_tunning_motion.sh <#runs per motion> <time per motion state (s)> <v,vn: pwm ini> <v,vn: pwm fin> <w: pwm ini> <w: pwm fin>
+     ```
+     - w / #ticks = f(PWM)
+     - Shell script to automatically perform v, vn, w motions to use the logged
+       data for tunning the PI controller with, e.g., the _Internal Model_
+       _Control (IMC) method_
 
 ## Contacts
 
