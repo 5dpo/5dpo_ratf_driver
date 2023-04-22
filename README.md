@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.2.0**
+**Version 1.3.0**
 
 **With this version, it is possible to do:**
 
@@ -30,6 +30,8 @@ This communication is based on the example `4_callback` provided in the
 - Set solenoid
 - Node specific for setting PWM values through ROS services and log data for
   future calibration of the PI controllers
+- Scripts (see in [sh](sh/)) to automate the retrieval of log data for tunning
+  the PI controllers
 
 **The next version will add these features:**
 
