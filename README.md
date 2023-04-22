@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.1.0**
+**Version 1.2.0**
 
 **With this version, it is possible to do:**
 
@@ -28,11 +28,11 @@ This communication is based on the example `4_callback` provided in the
   communication
 - Read switch
 - Set solenoid
+- Node specific for setting PWM values through ROS services and log data for
+  future calibration of the PI controllers
 
 **The next version will add these features:**
 
-- Node specific for setting PWM values through ROS services and log data for
-  future calibration of the PI controllers
 - Publish optionally the odometry data
 
 ## ROS
@@ -45,6 +45,8 @@ This communication is based on the example `4_callback` provided in the
 ### Dependencies
 
 - [roscpp](https://wiki.ros.org/roscpp)
+- [message_generation](https://wiki.ros.org/message_generation)
+- [message_runtime](https://wiki.ros.org/message_runtime)
 - [sdpo_ros_interfaces_hw](https://github.com/5dpo/5dpo_ros_interfaces)
 - [sdpo_ros_serial_port](https://github.com/5dpo/5dpo_ros_serial_port)
 - [serial_communication_channels](https://github.com/5dpo/serial_communication_channels)
@@ -70,10 +72,22 @@ This communication is based on the example `4_callback` provided in the
 - switch_state
   ([Bool.msg](https://docs.ros.org/en/api/std_msgs/html/msg/Bool.html))
 
+**sdpo_ratf_ros_driver_tune**
+
+- motors_data
+  ([mot_data_array.msg](https://github.com/5dpo/5dpo_ros_interfaces/blob/main/5dpo_ros_interfaces_hw/msg/mot_data_array.msg))
+
 ### Services
 
 - set_solenoid_state
   ([SetBool.srv](https://docs.ros.org/en/api/std_srvs/html/srv/SetBool.html))
+
+**sdpo_ratf_ros_driver_tune**
+
+- set_motors_pwm ([SetMotorsPWM.srv](srv/SetMotorsPWM.srv))
+  ```sh
+  rosservice call /unnamed_robot/set_motors_pwm [0,0,0,0]
+  ```
 
 ### Actions
 

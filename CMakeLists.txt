@@ -3,6 +3,8 @@ project(sdpo_ratf_ros_driver)
 
 set(${PROJECT_NAME}_CATKIN_DEPENDENCIES
   roscpp
+  message_generation
+  message_runtime
   sdpo_ros_interfaces_hw
   sdpo_ros_serial_port
   serial_communication_channels
@@ -10,14 +12,28 @@ set(${PROJECT_NAME}_CATKIN_DEPENDENCIES
   std_srvs
 )
 
-file(GLOB_RECURSE PROGRAM_SOURCES RELATIVE ${PROJECT_SOURCE_DIR}
-  "src/sdpo_ratf_ros_driver/*.cpp"
+file(GLOB_RECURSE MAIN_SOURCES RELATIVE ${PROJECT_SOURCE_DIR}
+  "src/sdpo_ratf_ros_driver/Robot5dpoRatf.cpp"
+  "src/sdpo_ratf_ros_driver/SdpoRatfROSDriver.cpp"
+  "src/sdpo_ratf_ros_driver/SerialChannelsConfig.cpp"
 )
-file(GLOB_RECURSE PROGRAM_MAIN RELATIVE ${PROJECT_SOURCE_DIR}
-  "src/main.cpp"
+file(GLOB_RECURSE MAIN_HEADERS RELATIVE ${PROJECT_SOURCE_DIR}
+  "include/sdpo_ratf_ros_driver/Robot5dpoRatf.h"
+  "include/sdpo_ratf_ros_driver/SdpoRatfROSDriver.h"
+  "include/sdpo_ratf_ros_driver/SerialChannelsConfig.h"
 )
-file(GLOB_RECURSE PROGRAM_HEADERS RELATIVE ${PROJECT_SOURCE_DIR}
-  "include/sdpo_ratf_ros_driver/*.h"
+
+file(GLOB_RECURSE TUNE_SOURCES RELATIVE ${PROJECT_SOURCE_DIR}
+  "src/sdpo_ratf_ros_driver/Robot5dpoRatf.cpp"
+  "src/sdpo_ratf_ros_driver/Robot5dpoRatfTune.cpp"
+  "src/sdpo_ratf_ros_driver/SdpoRatfROSDriverTunning.cpp"
+  "src/sdpo_ratf_ros_driver/SerialChannelsConfig.cpp"
+)
+file(GLOB_RECURSE TUNE_HEADERS RELATIVE ${PROJECT_SOURCE_DIR}
+  "include/sdpo_ratf_ros_driver/Robot5dpoRatf.h"
+  "include/sdpo_ratf_ros_driver/Robot5dpoRatfTune.h"
+  "include/sdpo_ratf_ros_driver/SdpoRatfROSDriverTunning.h"
+  "include/sdpo_ratf_ros_driver/SerialChannelsConfig.h"
 )
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -69,11 +85,10 @@ find_package(catkin REQUIRED COMPONENTS ${${PROJECT_NAME}_CATKIN_DEPENDENCIES})
 # )
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+add_service_files(
+  FILES
+  SetMotorsPWM.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -83,10 +98,7 @@ find_package(catkin REQUIRED COMPONENTS ${${PROJECT_NAME}_CATKIN_DEPENDENCIES})
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages()
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -149,9 +161,14 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node
-  ${PROGRAM_SOURCES}
-  ${PROGRAM_HEADERS}
-  ${PROGRAM_MAIN}
+  ${MAIN_SOURCES}
+  ${MAIN_HEADERS}
+  src/main.cpp
+)
+add_executable(${PROJECT_NAME}_tune
+  ${TUNE_SOURCES}
+  ${TUNE_HEADERS}
+  src/tune.cpp
 )
 
 ## Rename C++ executable without prefix
@@ -166,9 +183,16 @@ add_dependencies(${PROJECT_NAME}_node
   ${${PROJECT_NAME}_EXPORTED_TARGETS}
   ${catkin_EXPORTED_TARGETS}
 )
+add_dependencies(${PROJECT_NAME}_tune
+  ${${PROJECT_NAME}_EXPORTED_TARGETS}
+  ${catkin_EXPORTED_TARGETS}
+)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_tune
   ${catkin_LIBRARIES}
 )
 
