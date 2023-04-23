@@ -14,7 +14,6 @@ const double kWatchdogMotWRef = 0.2;
 class SdpoRatfROSDriver {
  private:
   ros::NodeHandle nh;
-  ros::Rate loop_rate_;
 
   ros::Publisher pub_mot_enc_;
   ros::Publisher pub_switch_;

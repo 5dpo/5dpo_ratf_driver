@@ -4,12 +4,8 @@
 
 namespace sdpo_ratf_ros_driver {
 
-SdpoRatfROSDriver::SdpoRatfROSDriver() : loop_rate_(kCtrlFreq) {
+SdpoRatfROSDriver::SdpoRatfROSDriver() {
   readParam();
-
-  rob_.setSerialPortName(serial_port_name_);
-  rob_.openSerial();
-  rob_.init();
 
   pub_mot_enc_ = nh.advertise<sdpo_ros_interfaces_hw::mot_enc_array>(
       "motors_encoders", 1);
@@ -17,45 +13,35 @@ SdpoRatfROSDriver::SdpoRatfROSDriver() : loop_rate_(kCtrlFreq) {
   sub_mot_ref_ = nh.subscribe("motors_ref", 1,
                               &SdpoRatfROSDriver::subMotRef, this);
 
+  rob_.setSerialPortName(serial_port_name_);
+  rob_.openSerial();
+  if (!rob_.isSerialOpen()) {
+    ROS_FATAL("[sdpo_ratf_ros_driver] Serial port %s not available",
+              serial_port_name_.c_str());
+    rob_.closeSerial();
+    ros::shutdown();
+  }
+  rob_.run = std::bind(&SdpoRatfROSDriver::run, this);
+  rob_.init();
+
   srv_solenoid_ = nh.advertiseService("set_solenoid_state",
       &SdpoRatfROSDriver::srvSolenoid, this);
+
+  sample_time_prev_ = ros::Time::now() - ros::Duration(kWatchdogMotWRef * 2);
+  sample_time_ = ros::Time::now();
 }
 
 void SdpoRatfROSDriver::run() {
-  sample_time_prev_ = ros::Time::now() - ros::Duration(kWatchdogMotWRef * 2);
-  sample_time_ = ros::Time::now();
-
-  while (ros::ok()) {
-    if (sample_time_ - sample_time_prev_ > ros::Duration(kWatchdogMotWRef)) {
-      /*ROS_WARN("[sdpo_ratf_ros_driver] Watchdog timer to monitor the motors "
-               "angular speed reference triggered (action: stop motors)");*/
-      rob_.mtx_.lock();
-      rob_.stopMotors();
-      rob_.mtx_.unlock();
-    }
-
-    if (!rob_.isSerialOpen()) {
-      /*ROS_WARN("[sdpo_ratf_ros_driver] Serial port %s not available "
-               "(action: stop motors + trying close and open port)",
-               serial_port_name_.c_str());*/
-      rob_.mtx_.lock();
-      rob_.stopMotors();
-      rob_.mtx_.unlock();
-      rob_.closeSerial();
-      rob_.openSerial();
-      if (rob_.isSerialOpen()) {
-        rob_.init();
-        ROS_INFO("[sdpo_ratf_ros_driver] Serial port %s successfully reconnected",
-                 serial_port_name_.c_str());
-      }
-    } else {
-      pubMotEnc();
-      pubSwitch();
-    }
-
-    ros::spinOnce();
-    loop_rate_.sleep();
+  if (sample_time_ - sample_time_prev_ > ros::Duration(kWatchdogMotWRef)) {
+    /*ROS_WARN("[sdpo_ratf_ros_driver] Watchdog timer to monitor the motors "
+              "angular speed reference triggered (action: stop motors)");*/
+    rob_.mtx_.lock();
+    rob_.stopMotors();
+    rob_.mtx_.unlock();
   }
+
+  pubMotEnc();
+  pubSwitch();
 }
 
 bool SdpoRatfROSDriver::readParam() {
