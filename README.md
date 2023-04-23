@@ -12,7 +12,7 @@ The serial communication is handled by
 This communication is based on the example `4_callback` provided in the
 [serial-port](https://github.com/fedetft/serial-port) GitHub repository.
 
-**Version 1.3.0**
+**Version 1.4.0**
 
 **With this version, it is possible to do:**
 
@@ -32,6 +32,7 @@ This communication is based on the example `4_callback` provided in the
   future calibration of the PI controllers
 - Scripts (see in [sh](sh/)) to automate the retrieval of log data for tunning
   the PI controllers
+- Synchronization of the firmware with the ROS publication topics
 
 **The next version will add these features:**
 
