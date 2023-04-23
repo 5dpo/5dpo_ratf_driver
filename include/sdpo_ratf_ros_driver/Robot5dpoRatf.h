@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <functional>
 #include <mutex>
 
 #include <sdpo_ros_serial_port/AsyncSerial.h>
@@ -9,7 +10,6 @@
 
 namespace sdpo_ratf_ros_driver {
 
-const int kCtrlFreq = 25;
 const int kMotCtrlFreq = 50;
 const int16_t kMaxMotPWM = 255;
 
@@ -55,6 +55,8 @@ class Robot5dpoRatf {
 
   bool switch_state = false;
   bool solenoid_state = false;
+
+  std::function<void()> run;
 
  private:
   std::string serial_port_name_;
