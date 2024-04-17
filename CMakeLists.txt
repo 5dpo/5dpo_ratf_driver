@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(sdpo_ratf_driver)
 
 
@@ -33,6 +33,48 @@ if("$ENV{ROS_VERSION}" STREQUAL "2")
   find_package(serial_communication_channels REQUIRED)
   find_package(std_msgs REQUIRED)
   find_package(std_srvs REQUIRED)
+
+  # Node Executable
+  add_executable(${PROJECT_NAME}_node
+    src/${PROJECT_NAME}/Robot5dpoRatf.cpp
+    src/${PROJECT_NAME}/SerialChannelsConfig.cpp
+    src/${PROJECT_NAME}/SdpoRatfDriverROS2.cpp
+    src/main_ros2.cpp
+  )
+
+  target_include_directories(${PROJECT_NAME}_node PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+
+  ament_target_dependencies(${PROJECT_NAME}_node
+    rclcpp
+    sdpo_drivers_interfaces
+    sdpo_serial_port
+    serial_communication_channels
+    std_msgs
+    std_srvs
+  )
+
+  # Node Executable Installation Rules
+  install(
+    TARGETS ${PROJECT_NAME}_node
+    DESTINATION lib/${PROJECT_NAME}
+  )
+
+  # Launch Files Installation Rules
+  install(
+    DIRECTORY launch
+    DESTINATION share/${PROJECT_NAME}
+  )
+
+  # Testing
+  if(BUILD_TESTING)
+    find_package(ament_lint_auto REQUIRED)
+    ament_lint_auto_find_test_dependencies()
+  endif()
+
+  ament_package()
 
 
 

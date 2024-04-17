@@ -1,0 +1,17 @@
+<launch>
+
+  <arg name="robot_id" default="$(env ROBOT_ID 'unnamed_robot')"/>
+
+
+
+  <node pkg="sdpo_ratf_driver" exec="sdpo_ratf_driver_node"
+      name="sdpo_ratf_driver"
+      namespace="$(var robot_id)">
+
+    <param name="encoder_res" value="64.0"/>
+    <param name="gear_reduction" value="43.8"/>
+    <param name="serial_port_name" value="/dev/ttyACM0"/>
+
+  </node>
+
+</launch>
