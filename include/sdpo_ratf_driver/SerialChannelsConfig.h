@@ -2,11 +2,19 @@
 
 #include <serial_communication_channels/serial_communication_channels.h>
 
+
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct StructSerialChannelsConfig {
+
+
+typedef struct StructSerialChannelsConfig
+{
+
   // Arduino >>> PC
   // - encoders:
   int32_t channel_g;
@@ -28,9 +36,16 @@ typedef struct StructSerialChannelsConfig {
   int32_t channel_K;
   // - solenoid
   int32_t channel_L;
+
 } SerialChannelsConfig;
 
+
+
+
+
 SerialChannelsConfig* InitCommunications();
+
+
 
 #ifdef __cplusplus
 }

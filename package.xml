@@ -1,60 +1,80 @@
 <?xml version="1.0"?>
-<package format="2">
-  <name>sdpo_ratf_ros_driver</name>
-  <version>0.0.0</version>
-  <description>The 5dpo_ratf_ros_driver package</description>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd"
+    schematypens="http://www.w3.org/2001/XMLSchema"?>
 
-  <!-- One maintainer tag required, multiple allowed, one person per tag -->
+<package format="3">
+
+  <name>sdpo_ratf_driver</name>
+
+  <version>0.0.0</version>
+
+  <description>
+    ROS package to communicate with the firmware present in the 5dpo Robotics
+    Team's robot for the Robot@Factory 4.0 competition in the scope of the
+    Portuguese Robotics Open (FNR).
+    This package should be compatible with both versions of the firmware
+    existent for the robot - Arduino Mega and Teensy 4.1 boards, respectively.
+    Just make sure that the baud rate set for the driver is the same one as in
+    the Arduino Mega's firmware. For the Teensy version, the board should be
+    able to interpret whatever baud rate you set from the driver's side.
+  </description>
+
+
+
+  <url type="github">https://github.com/5dpo/5dpo_ratf_driver</url>
+
+
+
   <maintainer email="sousa.ricardob@outlook.com">Ricardo B. Sousa</maintainer>
 
 
-  <!-- One license tag required, multiple allowed, one license per tag -->
+
+  <author email="amoreira@fe.up.pt">António Paulo Moreira</author>
+  <author email="claudia.d.rocha@inesctec.pt">Cláudia Daniela Rocha</author>
+  <author email="joao.g.martins@inesctec.pt">João G. Martins</author>
+  <author email="jose.m.sarmento@inesctec.pt">José Maria Sarmento</author>
+  <author email="up201806263@edu.fe.up.pt">José Pedro Carvalho</author>
+  <author email="maria.s.lopes@inesctec.pt">Maria S. Lopes</author>
+  <author email="paco@fe.up.pt">Paulo G. Costa</author>
+  <author email="heber.m.sobreira@inesctec.pt">Héber Miguel Sobreira</author>
+  <author email="sousa.ricardob@outlook.com">Ricardo B. Sousa</author>
+
+
+
+
+
   <license>TODO</license>
 
 
-  <!-- Url tags are optional, but multiple are allowed, one per tag -->
-  <url type="github">https://github.com/5dpo/5dpo_ratf_ros_driver</url>
 
 
-  <!-- Author tags are optional, multiple are allowed, one per tag -->
-  <author email="sousa.ricardob@outlook.com">Ricardo B. Sousa</author>
-  <author email="heber.m.sobreira@inesctec.pt">Héber Miguel Sobreira</author>
+
+  <buildtool_depend condition="$ROS_VERSION == 2">ament_cmake</buildtool_depend>
+  <buildtool_depend condition="$ROS_VERSION == 1">catkin</buildtool_depend>
 
 
-  <!-- The *depend tags are used to specify dependencies -->
-  <!-- Dependencies can be catkin packages or system dependencies -->
-  <!-- Examples: -->
-  <!-- Use depend as a shortcut for packages that are both build and exec dependencies -->
-  <!--   <depend>roscpp</depend> -->
-  <!--   Note that this is equivalent to the following: -->
-  <!--   <build_depend>roscpp</build_depend> -->
-  <!--   <exec_depend>roscpp</exec_depend> -->
-  <!-- Use build_depend for packages you need at compile time: -->
-  <!--   <build_depend>message_generation</build_depend> -->
-  <!-- Use build_export_depend for packages you need in order to build against this package: -->
-  <!--   <build_export_depend>message_generation</build_export_depend> -->
-  <!-- Use buildtool_depend for build tool packages: -->
-  <!--   <buildtool_depend>catkin</buildtool_depend> -->
-  <!-- Use exec_depend for packages you need at runtime: -->
-  <!--   <exec_depend>message_runtime</exec_depend> -->
-  <!-- Use test_depend for packages you need only for testing: -->
-  <!--   <test_depend>gtest</test_depend> -->
-  <!-- Use doc_depend for packages you need only for building documentation: -->
-  <!--   <doc_depend>doxygen</doc_depend> -->
-  <buildtool_depend>catkin</buildtool_depend>
-  <depend>roscpp</depend>
-  <depend>message_generation</depend>
-  <depend>message_runtime</depend>
-  <depend>sdpo_ros_interfaces_hw</depend>
-  <depend>sdpo_ros_serial_port</depend>
+
+  <depend condition="$ROS_VERSION == 2">rclcpp</depend>
+  <depend condition="$ROS_VERSION == 1">roscpp</depend>
+
+  <depend>sdpo_drivers_interfaces</depend>
+  <depend>sdpo_serial_port</depend>
   <depend>serial_communication_channels</depend>
   <depend>std_msgs</depend>
   <depend>std_srvs</depend>
 
 
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
 
+  <test_depend condition="$ROS_VERSION == 2">ament_lint_auto</test_depend>
+  <test_depend condition="$ROS_VERSION == 2">ament_lint_common</test_depend>
+
+
+
+
+
+  <export>
+    <build_type condition="$ROS_VERSION == 2">ament_cmake</build_type>
+    <build_type condition="$ROS_VERSION == 1">catkin</build_type>
   </export>
+
 </package>
