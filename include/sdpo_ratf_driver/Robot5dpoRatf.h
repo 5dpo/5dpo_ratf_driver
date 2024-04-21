@@ -17,7 +17,7 @@ namespace sdpo_ratf_driver
 
 
 
-const int   kMotCtrlFreq = 50;
+const int   kMotCtrlFreq = 100;
 const int16_t kMaxMotPWM = 1023;
 
 
