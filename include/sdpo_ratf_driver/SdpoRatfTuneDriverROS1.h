@@ -3,6 +3,7 @@
 #include <ros/ros.h>
 #include <sdpo_drivers_interfaces/MotDataArrayROS1.h>
 #include <sdpo_drivers_interfaces/MotRefArrayROS1.h>
+#include <sdpo_drivers_interfaces/SetMotorsPWM.h>
 #include <std_srvs/SetBool.h>
 
 #include "sdpo_ratf_driver/Robot5dpoRatfTune.h"
@@ -13,12 +14,6 @@
 
 namespace sdpo_ratf_driver
 {
-
-
-
-const double kWatchdogMotWRef = 0.2;
-
-
 
 
 
@@ -34,6 +29,7 @@ class SdpoRatfTuneDriverROS1
   ros::Publisher pub_switch_;
   ros::Subscriber sub_mot_ref_;
 
+  ros::ServiceServer srv_motors_pwm_;
   ros::ServiceServer srv_solenoid_;
 
   ros::Timer serial_port_timer_;
@@ -68,6 +64,8 @@ class SdpoRatfTuneDriverROS1
   void subMotRef(
       const sdpo_drivers_interfaces::MotRefArrayROS1::ConstPtr& msg);
 
+  bool srvMotorsPWM(sdpo_drivers_interfaces::SetMotorsPWM::Request& request,
+                    sdpo_drivers_interfaces::SetMotorsPWM::Response& response);
   bool srvSolenoid(std_srvs::SetBool::Request& request,
                    std_srvs::SetBool::Response& response);
 

@@ -55,6 +55,11 @@ SdpoRatfTuneDriverROS2::SdpoRatfTuneDriverROS2()
 
 
 
+  srv_motors_pwm_ = this->create_service
+      <sdpo_drivers_interfaces::srv::SetMotorsPWM>("set_motors_pwm",
+      std::bind(&SdpoRatfTuneDriverROS2::srvMotorsPWM, this,
+                std::placeholders::_1, std::placeholders::_2));
+
   srv_solenoid_ = this->create_service
       <std_srvs::srv::SetBool>("set_solenoid_state",
       std::bind(&SdpoRatfTuneDriverROS2::srvSolenoid, this,
@@ -145,27 +150,6 @@ void SdpoRatfTuneDriverROS2::checkSerialComms()
 void SdpoRatfTuneDriverROS2::run()
 {
 
-  try
-  {
-    if (rclcpp::Duration(this->now() - sample_time_) >
-        rclcpp::Duration::from_seconds(kWatchdogMotWRef))
-    {
-      rob_.mtx_.lock();
-      rob_.stopMotors();
-      rob_.mtx_.unlock();
-    }
-  }
-  catch (std::exception& e)
-  {
-    RCLCPP_WARN(this->get_logger(),
-                "Not possible to check the driver timeout condition (%s)",
-                e.what());
-
-    sample_time_ = this->now();
-
-    return;
-  }
-
   pubMotData();
   pubSwitch();
 
@@ -249,6 +233,39 @@ void SdpoRatfTuneDriverROS2::subMotRef(
   }
 
 } // void SdpoRatfTuneDriverROS2::subMotRef(const sdpo_drivers_interfaces::msg::MotRefArray::SharedPtr msg)
+
+
+
+
+
+void SdpoRatfTuneDriverROS2::srvMotorsPWM(
+    const std::shared_ptr<sdpo_drivers_interfaces::srv::SetMotorsPWM::Request> request,
+    const std::shared_ptr<sdpo_drivers_interfaces::srv::SetMotorsPWM::Response>)
+{
+
+  if (request->motors_pwm.size() != sizeof(rob_.mot)/sizeof(Motor))
+  {
+    RCLCPP_ERROR(this->get_logger(),
+                 "Expected to receive PWM for 4 motors instead of only %ld. "
+                 "Command ignored...",
+                 request->motors_pwm.size());
+  }
+
+  rob_.mtx_.lock();
+
+  for (size_t i = 0; i < request->motors_pwm.size(); i++)
+  {
+    rob_.mot[i].setPWM(request->motors_pwm[i]);
+  }
+
+  RCLCPP_INFO(this->get_logger(),
+              "PWM set: [%d %d %d %d]",
+              rob_.mot[0].pwm, rob_.mot[1].pwm,
+              rob_.mot[2].pwm, rob_.mot[3].pwm);
+
+  rob_.mtx_.unlock();
+
+} // SdpoRatfTuneDriverROS2::srvMotorsPWM(...)
 
 
 

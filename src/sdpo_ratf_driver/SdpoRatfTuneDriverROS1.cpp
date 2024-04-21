@@ -51,6 +51,9 @@ SdpoRatfTuneDriverROS1::SdpoRatfTuneDriverROS1()
 
 
 
+  srv_motors_pwm_ = nh_.advertiseService("set_motors_pwm",
+      &SdpoRatfTuneDriverROS1::srvMotorsPWM, this);
+
   srv_solenoid_ = nh_.advertiseService("set_solenoid_state",
       &SdpoRatfTuneDriverROS1::srvSolenoid, this);
 
@@ -140,27 +143,6 @@ void SdpoRatfTuneDriverROS1::checkSerialComms()
 void SdpoRatfTuneDriverROS1::run()
 {
 
-  try
-  {
-    if (ros::Duration(ros::Time::now() - sample_time_) >
-        ros::Duration(kWatchdogMotWRef))
-    {
-      rob_.mtx_.lock();
-      rob_.stopMotors();
-      rob_.mtx_.unlock();
-    }
-  }
-  catch (std::exception& e)
-  {
-    ROS_WARN("[%s] Not possible to check the driver timeout condition (%s)",
-             ros::this_node::getName().c_str(),
-             e.what());
-
-    sample_time_ = ros::Time::now();
-
-    return;
-  }
-
   pubMotData();
   pubSwitch();
 
@@ -244,6 +226,39 @@ void SdpoRatfTuneDriverROS1::subMotRef(
   }
 
 } // void SdpoRatfTuneDriverROS1::subMotRef(const sdpo_drivers_interfaces::MotRefArrayROS1::ConstPtr& msg)
+
+
+
+
+
+bool SdpoRatfTuneDriverROS1::srvMotorsPWM(
+    sdpo_drivers_interfaces::SetMotorsPWM::Request& request,
+    sdpo_drivers_interfaces::SetMotorsPWM::Response&)
+{
+
+  if (request.motors_pwm.size() != sizeof(rob_.mot)/sizeof(Motor))
+  {
+    ROS_ERROR("[%s] Expected to receive PWM for 4 motors instead of only %ld. "
+              "Command ignored...",
+              ros::this_node::getName().c_str(), request.motors_pwm.size());
+  }
+
+  rob_.mtx_.lock();
+
+  for (size_t i = 0; i < request.motors_pwm.size(); i++)
+  {
+    rob_.mot[i].setPWM(request.motors_pwm[i]);
+  }
+
+  ROS_INFO("[%s] PWM set: [%d %d %d %d]",
+           ros::this_node::getName().c_str(),
+           rob_.mot[0].pwm, rob_.mot[1].pwm,
+           rob_.mot[2].pwm, rob_.mot[3].pwm);
+
+  rob_.mtx_.unlock();
+
+  return true;
+}
 
 
 
