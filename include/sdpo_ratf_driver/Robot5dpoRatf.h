@@ -61,7 +61,7 @@ struct Motor
 
   void reset();
 
- private:
+ protected:
 
   void setW();
 
@@ -84,7 +84,7 @@ class Robot5dpoRatf
 
   std::function<void()> run;
 
- private:
+ protected:
 
   std::string serial_port_name_;
   SerialChannelsConfig *serial_cfg_;
@@ -108,12 +108,12 @@ class Robot5dpoRatf
 
   void reset();
 
-  void stopMotors();
+  virtual void stopMotors();
 
- private:
+ protected:
 
-  void rcvSerialData(const char *data, unsigned int len);
-  void sendSerialData();
+  virtual void rcvSerialData(const char *data, unsigned int len);
+  virtual void sendSerialData();
 
 };// class Robot5dpoRatf
 

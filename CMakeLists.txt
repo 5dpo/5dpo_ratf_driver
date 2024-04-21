@@ -42,7 +42,20 @@ if("$ENV{ROS_VERSION}" STREQUAL "2")
     src/main_ros2.cpp
   )
 
+  add_executable(${PROJECT_NAME}_tune
+    src/${PROJECT_NAME}/Robot5dpoRatf.cpp
+    src/${PROJECT_NAME}/Robot5dpoRatfTune.cpp
+    src/${PROJECT_NAME}/SerialChannelsConfig.cpp
+    src/${PROJECT_NAME}/SdpoRatfTuneDriverROS2.cpp
+    src/tune_ros2.cpp
+  )
+
   target_include_directories(${PROJECT_NAME}_node PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+  )
+
+  target_include_directories(${PROJECT_NAME}_tune PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
   )
@@ -56,9 +69,18 @@ if("$ENV{ROS_VERSION}" STREQUAL "2")
     std_srvs
   )
 
+  ament_target_dependencies(${PROJECT_NAME}_tune
+    rclcpp
+    sdpo_drivers_interfaces
+    sdpo_serial_port
+    serial_communication_channels
+    std_msgs
+    std_srvs
+  )
+
   # Node Executable Installation Rules
   install(
-    TARGETS ${PROJECT_NAME}_node
+    TARGETS ${PROJECT_NAME}_node ${PROJECT_NAME}_tune
     DESTINATION lib/${PROJECT_NAME}
   )
 
@@ -125,8 +147,21 @@ elseif("$ENV{ROS_VERSION}" STREQUAL "1")
     src/main_ros1.cpp
   )
 
+  add_executable(${PROJECT_NAME}_tune
+    src/${PROJECT_NAME}/Robot5dpoRatf.cpp
+    src/${PROJECT_NAME}/Robot5dpoRatfTune.cpp
+    src/${PROJECT_NAME}/SerialChannelsConfig.cpp
+    src/${PROJECT_NAME}/SdpoRatfTuneDriverROS1.cpp
+    src/tune_ros1.cpp
+  )
+
   # - target dependencies
   add_dependencies(${PROJECT_NAME}_node
+    ${${PROJECT_NAME}_EXPORTED_TARGETS}
+    ${catkin_EXPORTED_TARGETS}
+  )
+
+  add_dependencies(${PROJECT_NAME}_tune
     ${${PROJECT_NAME}_EXPORTED_TARGETS}
     ${catkin_EXPORTED_TARGETS}
   )
@@ -136,8 +171,13 @@ elseif("$ENV{ROS_VERSION}" STREQUAL "1")
     ${catkin_LIBRARIES}
   )
 
+  target_link_libraries(${PROJECT_NAME}_tune
+    ${catkin_LIBRARIES}
+  )
+
   # - installation rules
-  install(TARGETS ${PROJECT_NAME}_node
+  install(
+    TARGETS ${PROJECT_NAME}_node ${PROJECT_NAME}_tune
     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   )
 
