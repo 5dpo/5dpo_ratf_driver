@@ -4,17 +4,31 @@
 #include <functional>
 #include <mutex>
 
-#include <sdpo_ros_serial_port/AsyncSerial.h>
+#include <sdpo_serial_port/AsyncSerial.h>
 
-#include "sdpo_ratf_ros_driver/SerialChannelsConfig.h"
+#include "sdpo_ratf_driver/SerialChannelsConfig.h"
 
-namespace sdpo_ratf_ros_driver {
 
-const int kMotCtrlFreq = 50;
-const int16_t kMaxMotPWM = 255;
 
-struct Motor {
+
+
+namespace sdpo_ratf_driver
+{
+
+
+
+const int   kMotCtrlFreq = 100;
+const int16_t kMaxMotPWM = 1023;
+
+
+
+
+
+struct Motor
+{
+
  public:
+
   double encoder_res = 1;
   double gear_reduction = 1;
   int32_t enc_ticks = 0;
@@ -28,7 +42,10 @@ struct Motor {
   double sample_time_prev = 0;
   double sample_period = 0;
 
+
+
  public:
+
   void setEncoderRes(const double& enc_res);
   void setGearReduction(const double& gear_ratio);
 
@@ -45,11 +62,20 @@ struct Motor {
   void reset();
 
  private:
-  void setW();
-};
 
-class Robot5dpoRatf {
+  void setW();
+
+};// struct Motor
+
+
+
+
+
+class Robot5dpoRatf
+{
+
  public:
+
   Motor mot[4];
   std::mutex mtx_;
 
@@ -59,11 +85,15 @@ class Robot5dpoRatf {
   std::function<void()> run;
 
  private:
+
   std::string serial_port_name_;
   SerialChannelsConfig *serial_cfg_;
   CallbackAsyncSerial *serial_async_;
 
+
+
  public:
+
   Robot5dpoRatf();
   Robot5dpoRatf(std::string serial_port_name);
   ~Robot5dpoRatf();
@@ -81,8 +111,12 @@ class Robot5dpoRatf {
   void stopMotors();
 
  private:
+
   void rcvSerialData(const char *data, unsigned int len);
   void sendSerialData();
-};
 
-} // namespace sdpo_ratf_ros_driver
+};// class Robot5dpoRatf
+
+
+
+} // namespace sdpo_ratf_driver

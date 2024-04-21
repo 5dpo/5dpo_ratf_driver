@@ -1,8 +1,17 @@
-#include "sdpo_ratf_ros_driver/SerialChannelsConfig.h"
+#include "sdpo_ratf_driver/SerialChannelsConfig.h"
+
+
+
+
 
 SerialChannelsConfig serial_channels_config_;
 
-SerialChannelsConfig* InitCommunications() {
+
+
+
+
+SerialChannelsConfig* InitCommunications()
+{
   AddValueToChannel_int32_t('g', &serial_channels_config_.channel_g);
   AddValueToChannel_int32_t('h', &serial_channels_config_.channel_h);
   AddValueToChannel_int32_t('i', &serial_channels_config_.channel_i);
