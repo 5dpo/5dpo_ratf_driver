@@ -79,10 +79,15 @@ void SdpoRatfDriverROS2::getParam()
   serial_port_name_ =
       this->declare_parameter<std::string>("serial_port_name", "/dev/ttyACM0");
 
+  mot_ctrl_freq_ = this->declare_parameter<int>("mot_ctrl_freq", 100);
+  max_mot_pwm_   = this->declare_parameter<int>("max_mot_pwm"  , 1023);
+
   for (auto& m : rob_.mot)
   {
-    m.encoder_res = encoder_res_;
+    m.encoder_res    = encoder_res_;
     m.gear_reduction = gear_reduction_;
+    m.mot_ctrl_freq  = mot_ctrl_freq_;
+    m.max_mot_pwm    = static_cast<int16_t>(max_mot_pwm_);
   }
 
   RCLCPP_INFO(this->get_logger(),
@@ -92,6 +97,14 @@ void SdpoRatfDriverROS2::getParam()
   RCLCPP_INFO(this->get_logger(),
               "Gear reduction ratio: %lf (n:1)",
               rob_.mot[0].gear_reduction);
+
+  RCLCPP_INFO(this->get_logger(),
+              "Motor Controller Frequency: %d (Hz)",
+              rob_.mot[0].mot_ctrl_freq);
+
+  RCLCPP_INFO(this->get_logger(),
+              "Motor Maximum PWM: %d (0..1023)",
+              rob_.mot[0].max_mot_pwm);
 
   RCLCPP_INFO(this->get_logger(),
               "Serial port: %s",

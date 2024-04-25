@@ -77,10 +77,15 @@ void SdpoRatfTuneDriverROS1::getParam()
   nh_priv_.param<std::string>(
       "serial_port_name", serial_port_name_, "/dev/ttyACM0");
 
+  nh_priv_.param("mot_ctrl_freq", mot_ctrl_freq_, 100);
+  nh_priv_.param("max_mot_pwm"  , max_mot_pwm_  , 1023);
+
   for (auto& m : rob_.mot)
   {
-    m.encoder_res = encoder_res_;
+    m.encoder_res    = encoder_res_;
     m.gear_reduction = gear_reduction_;
+    m.mot_ctrl_freq  = mot_ctrl_freq_;
+    m.max_mot_pwm    = static_cast<int16_t>(max_mot_pwm_);
   }
 
   ROS_INFO("[%s] Encoder resolution: %lf (ticks/rev)",
@@ -90,6 +95,14 @@ void SdpoRatfTuneDriverROS1::getParam()
   ROS_INFO("[%s] Gear reduction ratio: %lf (n:1)",
            ros::this_node::getName().c_str(),
            rob_.mot[0].gear_reduction);
+
+  ROS_INFO("[%s] Motor Controller Frequency: %d (Hz)",
+           ros::this_node::getName().c_str(),
+           rob_.mot[0].mot_ctrl_freq);
+
+  ROS_INFO("[%s] Motor Maximum PWM: %d (0..1023)",
+           ros::this_node::getName().c_str(),
+           rob_.mot[0].max_mot_pwm);
 
   ROS_INFO("[%s] Serial port: %s",
            ros::this_node::getName().c_str(),

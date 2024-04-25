@@ -17,13 +17,6 @@ namespace sdpo_ratf_driver
 
 
 
-const int   kMotCtrlFreq = 100;
-const int16_t kMaxMotPWM = 1023;
-
-
-
-
-
 struct Motor
 {
 
@@ -41,6 +34,9 @@ struct Motor
   double sample_time = 0;
   double sample_time_prev = 0;
   double sample_period = 0;
+
+  int mot_ctrl_freq   = 100;
+  int16_t max_mot_pwm = 1023;
 
 
 

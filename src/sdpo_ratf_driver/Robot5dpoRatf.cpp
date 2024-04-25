@@ -98,13 +98,13 @@ double Motor::getEncTicksDeltaPub()
 
 void Motor::setPWM(const int16_t& pwm_mot)
 {
-  if (pwm_mot > kMaxMotPWM)
+  if (pwm_mot > max_mot_pwm)
   {
-    pwm = kMaxMotPWM;
+    pwm = max_mot_pwm;
   }
-  else if (pwm_mot < -kMaxMotPWM)
+  else if (pwm_mot < -max_mot_pwm)
   {
-    pwm = -kMaxMotPWM;
+    pwm = -max_mot_pwm;
   }
   else
   {
@@ -156,7 +156,7 @@ void Motor::reset()
 
 void Motor::setW()
 {
-  w = 2 * M_PI * enc_ticks_delta * kMotCtrlFreq /
+  w = 2 * M_PI * enc_ticks_delta * mot_ctrl_freq /
       (gear_reduction * encoder_res);
 } // void Motor::setW()
 
