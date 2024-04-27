@@ -52,7 +52,8 @@ void Robot5dpoRatfTune::sendSerialData()
     serial_async_->writeString(SendChannel('K'));
   }
 
-  serial_cfg_->channel_L = solenoid_state? 1 : 0;
+  serial_cfg_->channel_L = solenoid_1_state? 1 : 0;
+  serial_cfg_->channel_M = solenoid_2_state? 1 : 0;
 
   mtx_.unlock();
 

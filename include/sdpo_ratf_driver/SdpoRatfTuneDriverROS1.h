@@ -26,11 +26,13 @@ class SdpoRatfTuneDriverROS1
   ros::NodeHandle nh_priv_;
 
   ros::Publisher pub_mot_data_;
-  ros::Publisher pub_switch_;
+  ros::Publisher pub_switch_1_;
+  ros::Publisher pub_switch_2_;
   ros::Subscriber sub_mot_ref_;
 
   ros::ServiceServer srv_motors_pwm_;
-  ros::ServiceServer srv_solenoid_;
+  ros::ServiceServer srv_solenoid_1_;
+  ros::ServiceServer srv_solenoid_2_;
 
   ros::Timer serial_port_timer_;
 
@@ -69,8 +71,11 @@ class SdpoRatfTuneDriverROS1
 
   bool srvMotorsPWM(sdpo_drivers_interfaces::SetMotorsPWM::Request& request,
                     sdpo_drivers_interfaces::SetMotorsPWM::Response& response);
-  bool srvSolenoid(std_srvs::SetBool::Request& request,
-                   std_srvs::SetBool::Response& response);
+
+  bool srvSolenoid1(std_srvs::SetBool::Request& request,
+                    std_srvs::SetBool::Response& response);
+  bool srvSolenoid2(std_srvs::SetBool::Request& request,
+                    std_srvs::SetBool::Response& response);
 
 };// class SdpoRatfTuneDriverROS1
 

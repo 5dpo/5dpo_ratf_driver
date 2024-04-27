@@ -25,6 +25,7 @@ typedef struct StructSerialChannelsConfig
   int32_t channel_k;
   // - box switch
   int32_t channel_s;
+  int32_t channel_t;
 
   // PC >>> Arduino
   // - motors angular speed reference:
@@ -36,6 +37,7 @@ typedef struct StructSerialChannelsConfig
   int32_t channel_K;
   // - solenoid
   int32_t channel_L;
+  int32_t channel_M;
 
 } SerialChannelsConfig;
 

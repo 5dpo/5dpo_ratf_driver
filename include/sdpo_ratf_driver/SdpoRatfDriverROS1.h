@@ -31,10 +31,12 @@ class SdpoRatfDriverROS1
   ros::NodeHandle nh_priv_;
 
   ros::Publisher pub_mot_enc_;
-  ros::Publisher pub_switch_;
+  ros::Publisher pub_switch_1_;
+  ros::Publisher pub_switch_2_;
   ros::Subscriber sub_mot_ref_;
 
-  ros::ServiceServer srv_solenoid_;
+  ros::ServiceServer srv_solenoid_1_;
+  ros::ServiceServer srv_solenoid_2_;
 
   ros::Timer serial_port_timer_;
 
@@ -71,8 +73,10 @@ class SdpoRatfDriverROS1
   void subMotRef(
       const sdpo_drivers_interfaces::MotRefArrayROS1::ConstPtr& msg);
 
-  bool srvSolenoid(std_srvs::SetBool::Request& request,
-                   std_srvs::SetBool::Response& response);
+  bool srvSolenoid1(std_srvs::SetBool::Request& request,
+                    std_srvs::SetBool::Response& response);
+  bool srvSolenoid2(std_srvs::SetBool::Request& request,
+                    std_srvs::SetBool::Response& response);
 
 };// class SdpoRatfDriverROS1
 

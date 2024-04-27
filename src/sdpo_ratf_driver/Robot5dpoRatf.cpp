@@ -370,8 +370,15 @@ void Robot5dpoRatf::rcvSerialData(const char *data, unsigned int len)
 
         case 's':
           mtx_.lock();
-          switch_state = (serial_cfg_->channel_s == 0);
+          switch_1_state = (serial_cfg_->channel_s == 0);
           mtx_.unlock();
+          break;
+
+        case 't':
+          mtx_.lock();
+          switch_2_state = (serial_cfg_->channel_t == 0);
+          mtx_.unlock();
+          break;
 
         default:
           break;
@@ -392,7 +399,8 @@ void Robot5dpoRatf::sendSerialData()
   serial_cfg_->channel_H = static_cast<float>(mot[1].w_r);
   serial_cfg_->channel_I = static_cast<float>(mot[2].w_r);
   serial_cfg_->channel_J = static_cast<float>(mot[3].w_r);
-  serial_cfg_->channel_L = solenoid_state? 1 : 0;
+  serial_cfg_->channel_L = solenoid_1_state? 1 : 0;
+  serial_cfg_->channel_M = solenoid_2_state? 1 : 0;
   mtx_.unlock();
 
   serial_async_->writeString(SendChannel('G'));

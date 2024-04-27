@@ -37,7 +37,8 @@ SdpoRatfDriverROS2::SdpoRatfDriverROS2()
 
   pub_mot_enc_ = this->create_publisher
       <sdpo_drivers_interfaces::msg::MotEncArray>("motors_enc", 10);
-  pub_switch_ = this->create_publisher<std_msgs::msg::Bool>("switch_state", 10);
+  pub_switch_1_ = this->create_publisher<std_msgs::msg::Bool>("switch_1_state", 10);
+  pub_switch_2_ = this->create_publisher<std_msgs::msg::Bool>("switch_2_state", 10);
 
   sub_mot_ref_ = this->create_subscription
       <sdpo_drivers_interfaces::msg::MotRefArray>(
@@ -55,9 +56,13 @@ SdpoRatfDriverROS2::SdpoRatfDriverROS2()
 
 
 
-  srv_solenoid_ = this->create_service
-      <std_srvs::srv::SetBool>("set_solenoid_state",
-      std::bind(&SdpoRatfDriverROS2::srvSolenoid, this,
+  srv_solenoid_1_ = this->create_service
+      <std_srvs::srv::SetBool>("set_solenoid_1_state",
+      std::bind(&SdpoRatfDriverROS2::srvSolenoid1, this,
+                std::placeholders::_1, std::placeholders::_2));
+  srv_solenoid_2_ = this->create_service
+      <std_srvs::srv::SetBool>("set_solenoid_2_state",
+      std::bind(&SdpoRatfDriverROS2::srvSolenoid2, this,
                 std::placeholders::_1, std::placeholders::_2));
 
 
@@ -227,13 +232,15 @@ void SdpoRatfDriverROS2::pubMotEnc()
 
 void SdpoRatfDriverROS2::pubSwitch()
 {
-  std_msgs::msg::Bool msg;
+  std_msgs::msg::Bool msg_1, msg_2;
 
   rob_.mtx_.lock();
-  msg.data = rob_.switch_state;
+  msg_1.data = rob_.switch_1_state;
+  msg_2.data = rob_.switch_2_state;
   rob_.mtx_.unlock();
 
-  pub_switch_->publish(msg);
+  pub_switch_1_->publish(msg_1);
+  pub_switch_2_->publish(msg_2);
 } // void SdpoRatfDriverROS2::pubSwitch()
 
 
@@ -262,18 +269,35 @@ void SdpoRatfDriverROS2::subMotRef(
 
 
 
-void SdpoRatfDriverROS2::srvSolenoid(
+void SdpoRatfDriverROS2::srvSolenoid1(
     const std::shared_ptr<std_srvs::srv::SetBool::Request> request,
     const std::shared_ptr<std_srvs::srv::SetBool::Response> response)
 {
   rob_.mtx_.lock();
-  rob_.solenoid_state = request->data;
+  rob_.solenoid_1_state = request->data;
   rob_.mtx_.unlock();
 
   response->success = true;
   response->message = "";
 
-} // void SdpoRatfDriverROS2::srvSolenoid(...)
+} // void SdpoRatfDriverROS2::srvSolenoid1(...)
+
+
+
+
+
+void SdpoRatfDriverROS2::srvSolenoid2(
+    const std::shared_ptr<std_srvs::srv::SetBool::Request> request,
+    const std::shared_ptr<std_srvs::srv::SetBool::Response> response)
+{
+  rob_.mtx_.lock();
+  rob_.solenoid_2_state = request->data;
+  rob_.mtx_.unlock();
+
+  response->success = true;
+  response->message = "";
+
+} // void SdpoRatfDriverROS2::srvSolenoid2(...)
 
 
 

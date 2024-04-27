@@ -34,7 +34,8 @@ SdpoRatfDriverROS1::SdpoRatfDriverROS1()
 
   pub_mot_enc_ = nh_.advertise
       <sdpo_drivers_interfaces::MotEncArrayROS1>("motors_enc", 10);
-  pub_switch_ = nh_.advertise<std_msgs::Bool>("switch_state", 10);
+  pub_switch_1_ = nh_.advertise<std_msgs::Bool>("switch_1_state", 10);
+  pub_switch_2_ = nh_.advertise<std_msgs::Bool>("switch_2_state", 10);
 
   sub_mot_ref_ = nh_.subscribe
       <sdpo_drivers_interfaces::MotRefArrayROS1>(
@@ -51,8 +52,10 @@ SdpoRatfDriverROS1::SdpoRatfDriverROS1()
 
 
 
-  srv_solenoid_ = nh_.advertiseService("set_solenoid_state",
-      &SdpoRatfDriverROS1::srvSolenoid, this);
+  srv_solenoid_1_ = nh_.advertiseService("set_solenoid_1_state",
+      &SdpoRatfDriverROS1::srvSolenoid1, this);
+  srv_solenoid_2_ = nh_.advertiseService("set_solenoid_2_state",
+      &SdpoRatfDriverROS1::srvSolenoid2, this);
 
 
 
@@ -223,13 +226,15 @@ void SdpoRatfDriverROS1::pubMotEnc()
 
 void SdpoRatfDriverROS1::pubSwitch()
 {
-  std_msgs::Bool msg;
+  std_msgs::Bool msg_1, msg_2;
 
   rob_.mtx_.lock();
-  msg.data = rob_.switch_state;
+  msg_1.data = rob_.switch_1_state;
+  msg_2.data = rob_.switch_2_state;
   rob_.mtx_.unlock();
 
-  pub_switch_.publish(msg);
+  pub_switch_1_.publish(msg_1);
+  pub_switch_2_.publish(msg_2);
 } // void SdpoRatfDriverROS1::pubSwitch()
 
 
@@ -258,17 +263,33 @@ void SdpoRatfDriverROS1::subMotRef(
 
 
 
-bool SdpoRatfDriverROS1::srvSolenoid(std_srvs::SetBool::Request& request,
-                                     std_srvs::SetBool::Response& response)
+bool SdpoRatfDriverROS1::srvSolenoid1(std_srvs::SetBool::Request& request,
+                                      std_srvs::SetBool::Response& response)
 {
   rob_.mtx_.lock();
-  rob_.solenoid_state = request.data;
+  rob_.solenoid_1_state = request.data;
   rob_.mtx_.unlock();
 
   response.success = true;
   response.message = "";
   return true;
-}
+} // bool SdpoRatfDriverROS1::srvSolenoid1(std_srvs::SetBool::Request& request, std_srvs::SetBool::Response& response)
+
+
+
+
+
+bool SdpoRatfDriverROS1::srvSolenoid2(std_srvs::SetBool::Request& request,
+                                      std_srvs::SetBool::Response& response)
+{
+  rob_.mtx_.lock();
+  rob_.solenoid_2_state = request.data;
+  rob_.mtx_.unlock();
+
+  response.success = true;
+  response.message = "";
+  return true;
+} // bool SdpoRatfDriverROS1::srvSolenoid2(std_srvs::SetBool::Request& request, std_srvs::SetBool::Response& response)
 
 
 

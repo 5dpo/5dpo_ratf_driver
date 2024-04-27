@@ -75,8 +75,10 @@ class Robot5dpoRatf
   Motor mot[4];
   std::mutex mtx_;
 
-  bool switch_state = false;
-  bool solenoid_state = false;
+  bool switch_1_state = false;
+  bool switch_2_state = false;
+  bool solenoid_1_state = false;
+  bool solenoid_2_state = false;
 
   std::function<void()> run;
 

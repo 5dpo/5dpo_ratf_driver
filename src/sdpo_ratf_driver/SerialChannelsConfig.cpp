@@ -18,6 +18,7 @@ SerialChannelsConfig* InitCommunications()
   AddValueToChannel_int32_t('j', &serial_channels_config_.channel_j);
   AddValueToChannel_int32_t('k', &serial_channels_config_.channel_k);
   AddValueToChannel_int32_t('s', &serial_channels_config_.channel_s);
+  AddValueToChannel_int32_t('t', &serial_channels_config_.channel_t);
 
   AddValueToChannel_float('G', &serial_channels_config_.channel_G);
   AddValueToChannel_float('H', &serial_channels_config_.channel_H);
@@ -25,6 +26,7 @@ SerialChannelsConfig* InitCommunications()
   AddValueToChannel_float('J', &serial_channels_config_.channel_J);
   AddValueToChannel_int32_t('K', &serial_channels_config_.channel_K);
   AddValueToChannel_int32_t('L', &serial_channels_config_.channel_L);
+  AddValueToChannel_int32_t('M', &serial_channels_config_.channel_M);
 
   return &serial_channels_config_;
 }

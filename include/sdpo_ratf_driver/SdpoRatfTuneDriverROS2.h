@@ -24,12 +24,14 @@ class SdpoRatfTuneDriverROS2 : public rclcpp::Node
  private:
 
   rclcpp::Publisher<sdpo_drivers_interfaces::msg::MotDataArray>::SharedPtr pub_mot_data_;
-  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr                        pub_switch_;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr                        pub_switch_1_;
+  rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr                        pub_switch_2_;
   rclcpp::Subscription<sdpo_drivers_interfaces::msg::MotRefArray>::SharedPtr sub_mot_ref_;
 
   rclcpp::Service<sdpo_drivers_interfaces::srv::SetMotorsPWM>::SharedPtr srv_motors_pwm_;
 
-  rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr srv_solenoid_;
+  rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr srv_solenoid_1_;
+  rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr srv_solenoid_2_;
 
   rclcpp::TimerBase::SharedPtr serial_port_timer_;
 
@@ -68,8 +70,10 @@ class SdpoRatfTuneDriverROS2 : public rclcpp::Node
 
   void srvMotorsPWM(const std::shared_ptr<sdpo_drivers_interfaces::srv::SetMotorsPWM::Request> request,
                     const std::shared_ptr<sdpo_drivers_interfaces::srv::SetMotorsPWM::Response> response);
-  void srvSolenoid(const std::shared_ptr<std_srvs::srv::SetBool::Request> request,
-                   const std::shared_ptr<std_srvs::srv::SetBool::Response> response);
+  void srvSolenoid1(const std::shared_ptr<std_srvs::srv::SetBool::Request> request,
+                    const std::shared_ptr<std_srvs::srv::SetBool::Response> response);
+  void srvSolenoid2(const std::shared_ptr<std_srvs::srv::SetBool::Request> request,
+                    const std::shared_ptr<std_srvs::srv::SetBool::Response> response);
 
 };// class SdpoRatfTuneDriverROS2 : public rclcpp::Node
 
